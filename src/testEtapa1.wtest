@@ -1,0 +1,76 @@
+import paises.*
+import participantes.*
+import cumbre.*
+import conocimientos.*
+
+describe "Tests Etapa 1"{
+//declaracion objetos
+
+	//paises
+	const argentina = new Pais()
+	
+	const brasil = new Pais()
+	
+	const colombia = new Pais()
+	
+	const coreaDelSur = new Pais()
+	
+	const coreaDelNorte = new Pais()
+	
+	//Pacientes
+	const juana = new Programador(nacionalidad= argentina, commits= 600, conocimientos = #{programacionBasica, css, html})
+	
+	const lucia = new Programador(nacionalidad= brasil, commits= 800, conocimientos = #{programacionBasica, basesDeDatos})
+	
+	const mariana = new Especialista(nacionalidad= argentina, commits= 200, conocimientos = #{programacionBasica,instalacionLinux, objetos, disenioConObjetos})
+	
+	const susana = new Especialista(nacionalidad= colombia, commits= 1500, conocimientos = #{programacionBasica, objetos})
+
+	
+//iniciar Con:
+	method initialize(){
+		cumbre.registrarIngreso(juana)
+		cumbre.registrarIngreso(lucia)
+		cumbre.registrarIngreso(mariana)
+		coreaDelSur.registrarConflicto(coreaDelNorte)
+		coreaDelNorte.registrarConflicto(coreaDelSur)
+		cumbre.agregarAuspiciantes(#{argentina,colombia, coreaDelNorte})
+	}
+	
+//tests 
+	test "países con participantes Argentina y Brasil"{
+		assert.equals(#{argentina, brasil}, cumbre.paisesDeLosParticipantes() )
+	}	
+	
+	test "2 participantes de Argentina"{
+		assert.equals(2, cumbre.cantidadDeParticipantesDe(argentina))
+	}	
+	
+	test "1 participantes de Brasil"{
+		assert.equals(1, cumbre.cantidadDeParticipantesDe(brasil))
+	}
+	 
+	test "la cumbre es relevante (porque son las tres capas)"{
+		assert.that(cumbre.esRelevante())
+	}
+	
+	test "agregamos a Susana, ahora los países con participantes son Argentina, Brasil y Colombia"{
+		cumbre.registrarIngreso(susana)
+		assert.equals(#{argentina, brasil, colombia}, cumbre.paisesDeLosParticipantes() )
+	}
+
+	test "ahora la cumbre no es relevante (porque Susana no es capa)."{
+		cumbre.registrarIngreso(susana)
+		assert.notThat(cumbre.esRelevante())
+	}	
+	
+	test "Corea del Sur es conflictivo para la cumbre a partir del conflicto que tiene con Corea del Norte."{
+		assert.that(coreaDelSur.esConflictivoParaLaCumbre())
+	}
+	
+	test "país con más participantes Argentina"{
+		assert.equals(argentina, cumbre.paisConMasParticipantes())
+	}	
+		
+}
+

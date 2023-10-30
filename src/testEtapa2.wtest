@@ -1,0 +1,100 @@
+import paises.*
+import participantes.*
+import cumbre.*
+import conocimientos.*
+
+describe "Tests Etapa 2"{
+//declaracion objetos
+
+	//paises
+	const argentina = new Pais()
+	
+	const brasil = new Pais()
+	
+	const colombia = new Pais()
+	
+	const coreaDelSur = new Pais()
+	
+	const coreaDelNorte = new Pais()
+	
+	
+	//Pacientes
+	const juana = new Programador(nacionalidad= argentina, commits= 600, conocimientos = #{programacionBasica, css, html})
+	
+	const lucia = new Programador(nacionalidad= brasil, commits= 800, conocimientos = #{programacionBasica, basesDeDatos})
+	
+	const mariana = new Especialista(nacionalidad= argentina, commits= 200, conocimientos = #{programacionBasica,instalacionLinux, objetos, disenioConObjetos})
+	
+	const susana = new Especialista(nacionalidad= colombia, commits= 1500, conocimientos = #{programacionBasica, objetos})
+	
+
+//iniciar Con:
+	method initialize(){
+		coreaDelSur.registrarConflicto(coreaDelNorte)
+		coreaDelNorte.registrarConflicto(coreaDelSur)
+		cumbre.agregarAuspiciantes(#{argentina,colombia, coreaDelNorte})
+		brasil.registrarConflicto(coreaDelNorte)
+		coreaDelNorte.registrarConflicto(brasil)
+		cumbre.registrarIngreso(juana)
+	
+	}
+	
+//tests 
+	test "juana cumple con los requisitos de acceso a la cumbre"{
+		assert.that(juana.cumpleRequisitosDeAccesoALaCumbre())
+	}
+	
+	test "lucia cumple con los requisitos de acceso a la cumbre"{
+		assert.that(lucia.cumpleRequisitosDeAccesoALaCumbre())
+	}
+	
+	test "mariana NO cumple con los requisitos de acceso a la cumbre"{
+		assert.notThat(mariana.cumpleRequisitosDeAccesoALaCumbre())
+	}
+	 
+	test "susana cumple con los requisitos de acceso a la cumbre"{
+		assert.that(susana.cumpleRequisitosDeAccesoALaCumbre())
+	}
+	
+	test "juana No tiene restringido el acceso a la cumbre"{
+		assert.notThat(cumbre.tieneRestringidoElAcceso(juana))
+	}
+	
+	test "lucia tiene restringido el acceso a la cumbre por conflicto entre corea del norte y brasil"{
+		assert.that(cumbre.tieneRestringidoElAcceso(lucia))
+	}
+	
+	test "mariana No tiene restringido el acceso a la cumbre"{
+		assert.notThat(cumbre.tieneRestringidoElAcceso(mariana))
+	}
+	
+	test "susana No tiene restringido el acceso a la cumbre"{
+		assert.notThat(cumbre.tieneRestringidoElAcceso(susana))
+	}
+	
+	test "juana puede ingresar a la cumbre"{
+		assert.that(cumbre.puedeIngresar(susana))
+	}
+	
+	test "lucia No puede ingresar a la cumbre"{
+		assert.notThat(cumbre.puedeIngresar(lucia))
+	}
+	
+	test "mariana No puede ingresar a la cumbre porque no cumple con los commits indicados"{
+		assert.notThat(cumbre.puedeIngresar(mariana))
+	}
+	
+	test "susana puede ingresar a la cumbre"{
+		assert.that(cumbre.puedeIngresar(susana))
+	}
+	
+	test "la cumbre es segura ya que todos los participantes registrados cumplen con las condiciones del participante y restricciones de la cumbre"{
+		assert.that(cumbre.esSegura())
+	}
+	
+	test "la cumbre NO es segura con el ingreso de Mariana ya que no cumple con las condiciones del participante"{
+		cumbre.registrarIngreso(mariana)
+		assert.notThat(cumbre.esSegura())
+	}
+	
+}	

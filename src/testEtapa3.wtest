@@ -1,0 +1,35 @@
+import paises.*
+import participantes.*
+import cumbre.*
+import conocimientos.*
+import empresas.*
+
+
+describe "Tests de cumbre parte 4: Gerente" {
+//declaracion objetos
+	//paises
+    const argentina = new Pais()
+    
+    const brasil = new Pais()
+    
+    const colombia = new Pais()
+    
+    const coreaDelSur = new Pais()
+    
+	//empresa
+    const digiSolutions = new Empresa(paises=#{argentina, brasil, colombia})
+    
+	//Participantes
+    const marcos = new Gerente(nacionalidad=coreaDelSur, commits = 3000, empresa=digiSolutions)
+
+//testssss
+    test "marcos es CAPO porque trabaja en una multinacional" {
+        assert.that(marcos.esCapo())
+    }
+
+    test "marcos no puede registrarse en la cumbre y se produce un error"{
+        assert.throwsException({cumbre.registrarIngreso(marcos)})
+    }
+    
+}
+
